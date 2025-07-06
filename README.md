@@ -1,69 +1,91 @@
-# React + TypeScript + Vite
+# 📚 Minimal Library Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A fully client-side **Library Management System** built with **React**, **TypeScript**, **Redux Toolkit Query**, and **Tailwind CSS**. This project demonstrates a clean, functional UI with proper REST API integration—enabling users to manage books and borrowing operations without authentication or payment flows.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Live Demo
 
-## Expanding the ESLint configuration
+[Live Site](https://library-frontend-six-sigma.vercel.app/)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 📦 Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+| Layer           | Technology                     |
+|----------------|---------------------------------|
+| Frontend       | React, TypeScript               |
+| State Manager  | Redux Toolkit + RTK Query       |
+| Styling        | Tailwind CSS                    |
+| Backend        | Node.js, Express.js             |
+| Database       | MongoDB, Mongoose               |
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## ✨ Features
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 🔓 Public Routes
+All pages are accessible without login or authentication.
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
+
+### 📘 Book Management
+
+- **Book List Table**:
+  - Columns: `Title`, `Author`, `Genre`, `ISBN`, `Copies`, `Availability`, `Actions`.
+  - Actions:
+    - 📝 **Edit**: Updates book details via API.
+    - 🗑️ **Delete**: Confirmation modal before deletion.
+    - 📦 **Borrow**: Opens form to borrow book.
+- **Business Logic**:
+  - If `copies = 0`, mark the book as **unavailable**.
+
+- **Add New Book**:
+  - Form fields: `Title`, `Author`, `Genre`, `ISBN`, `Description`, `Copies`, `Available (optional)`.
+  - After submission: redirect to book list and update UI.
+
+---
+
+### 📚 Borrow Book
+
+- Opens from **“Borrow”** button in book list.
+- Fields:
+  - Quantity (max: available copies)
+  - Due Date
+- Validations:
+  - Quantity cannot exceed available copies.
+  - If copies reach 0 → Book becomes unavailable.
+- On submit:
+  - API call to borrow endpoint.
+  - Redirect to **Borrow Summary** page.
+
+---
+
+### 📊 Borrow Summary
+
+- Aggregated borrow data (via backend aggregation).
+- Displays:
+  - Book Title
+  - ISBN
+  - Total Quantity Borrowed
+
+---
+
+## 🧩 Pages
+
+| Path                | Description                                      |
+|---------------------|--------------------------------------------------|
+| `/books`            | List of all books with all CRUD actions.         |
+| `/create-book`      | Form to add a new book.                          |
+| `/books/:id`        | View detailed information of a book.             |
+| `/edit-book/:id`    | Edit book details.                               |
+| `/borrow/:bookId`   | Form to borrow a selected book.                  |
+| `/borrow-summary`   | Summary of all borrowed books.                   |
+
+---
+
+## 🧠 Architecture & API
+
+### RTK Query
+- All API interactions are powered by **Redux Toolkit Query**.
+- Queries and mutations are fully **type-safe** using TypeScript interfaces.
