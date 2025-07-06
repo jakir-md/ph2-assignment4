@@ -4,13 +4,13 @@ A fully client-side **Library Management System** built with **React**, **TypeSc
 
 ---
 
-## 🚀 Live Demo
+## Live Demo
 
 [Live Site](https://library-frontend-six-sigma.vercel.app/)
 
 ---
 
-## 📦 Tech Stack
+## Tech Stack
 
 | Layer           | Technology                     |
 |----------------|---------------------------------|
@@ -22,9 +22,9 @@ A fully client-side **Library Management System** built with **React**, **TypeSc
 
 ---
 
-## ✨ Features
+## Features
 
-### 🔓 Public Routes
+### Public Routes
 All pages are accessible without login or authentication.
 
 ---
@@ -34,9 +34,9 @@ All pages are accessible without login or authentication.
 - **Book List Table**:
   - Columns: `Title`, `Author`, `Genre`, `ISBN`, `Copies`, `Availability`, `Actions`.
   - Actions:
-    - 📝 **Edit**: Updates book details via API.
-    - 🗑️ **Delete**: Confirmation modal before deletion.
-    - 📦 **Borrow**: Opens form to borrow book.
+    -  **Edit**: Updates book details via API.
+    -  **Delete**: Confirmation modal before deletion.
+    -  **Borrow**: Opens form to borrow book.
 - **Business Logic**:
   - If `copies = 0`, mark the book as **unavailable**.
 
@@ -46,7 +46,7 @@ All pages are accessible without login or authentication.
 
 ---
 
-### 📚 Borrow Book
+### Borrow Book
 
 - Opens from **“Borrow”** button in book list.
 - Fields:
@@ -61,7 +61,7 @@ All pages are accessible without login or authentication.
 
 ---
 
-### 📊 Borrow Summary
+### Borrow Summary
 
 - Aggregated borrow data (via backend aggregation).
 - Displays:
@@ -71,20 +71,7 @@ All pages are accessible without login or authentication.
 
 ---
 
-## 🧩 Pages
-
-| Path                | Description                                      |
-|---------------------|--------------------------------------------------|
-| `/books`            | List of all books with all CRUD actions.         |
-| `/create-book`      | Form to add a new book.                          |
-| `/books/:id`        | View detailed information of a book.             |
-| `/edit-book/:id`    | Edit book details.                               |
-| `/borrow/:bookId`   | Form to borrow a selected book.                  |
-| `/borrow-summary`   | Summary of all borrowed books.                   |
-
----
-
-## 🧠 Architecture & API
+## API's
 
 ### RTK Query
 - All API interactions are powered by **Redux Toolkit Query**.
