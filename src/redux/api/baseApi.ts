@@ -51,6 +51,14 @@ export const baseApi = createApi({
         method: "POST",
         body: body
       })
+    }),
+
+    addABook: builder.mutation({
+      query: (bookInfo) => ({
+        url: "/books",
+        method: "POST",
+        body: bookInfo
+      })
     })
   }),
 });
@@ -61,5 +69,6 @@ export const {
   useDeleteABookMutation,
   useUpdateBookByIdMutation,
   useGetBorrowSummaryQuery,
-  useBorrowABookMutation
+  useBorrowABookMutation,
+  useAddABookMutation
 } = baseApi;

@@ -12,6 +12,7 @@ import type { IBook } from "../../types";
 import Swal from "sweetalert2";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 export default function Books() {
   const [myBook, setMyBook] = useState({
@@ -24,9 +25,10 @@ export default function Books() {
     available: false,
     copies: "",
   });
+
   const [borrowDate, setBorrowDate] = useState(new Date());
   const [borrowError, setBorrowError] = useState(false);
-
+  // const {} =
 
   const { isLoading, data } = useGetAllBooksQuery(undefined, {
     refetchOnFocus: true,
@@ -74,23 +76,14 @@ export default function Books() {
     const doc = document.getElementById("my_modal_5") as HTMLDialogElement;
     doc.close();
     const updateBook = async () => {
-      const res = await updateBookById({
+      await updateBookById({
         bookId: myBook._id,
         bookInfo: myBook,
       });
-      console.log(res.data);
-      console.log("mybook after submit", myBook);
     };
     updateBook();
+    toast.success("Book Updated Successfully!");
   };
-
-  if (isLoading) {
-    return (
-      <div className="mx-auto mt-52 w-10">
-        <span className="loading loading-bars loading-xl"></span>
-      </div>
-    );
-  }
 
   const handleBorrow = (book: IBook) => {
     const doc = document.getElementById("my_modal_6") as HTMLDialogElement;
@@ -113,11 +106,19 @@ export default function Books() {
     } else {
       const doc = document.getElementById("my_modal_6") as HTMLDialogElement;
       setBorrowError(false);
-      navigate('/borrowSummary');
+      toast.success("Successfully Borrowed!");
+      navigate("/borrowSummary");
       doc.close();
     }
   };
 
+  if (isLoading) {
+    return (
+      <div className="mx-auto my-20 w-10">
+        <span className="loading loading-bars loading-xl"></span>
+      </div>
+    );
+  }
   return (
     <div>
       <div className="overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
@@ -126,14 +127,14 @@ export default function Books() {
             <h1 className="text-2xl font-bold text-center">Update Book</h1>
             <div className="modal-action">
               <div className="card bg-base-100 w-full shrink-0 shadow-2xl">
-                <div className="card-body">
+                <div className="card-body px-4">
                   <form className="fieldset" onSubmit={handleFormSubmit}>
-                    <div className="grid grid-cols-7 gap-4">
+                    <div className="grid grid-cols-7 gap-2 md:gap-4">
                       <div className="col-span-5">
                         <label className="label">Title</label>
                         <input
                           type="text"
-                          className="w-full input focus:outline-0"
+                          className="w-full text-sm border-1 border-base-300 px-2 py-3 rounded-md focus:outline-0"
                           placeholder="Book Title"
                           defaultValue={myBook.title}
                           onChange={(e) => {
@@ -141,7 +142,7 @@ export default function Books() {
                           }}
                         />
                       </div>
-                      <div>
+                      <div className="col-span-2">
                         <fieldset className="fieldset bg-base-100 border-base-300 rounded-md border px-2">
                           <legend className="fieldset-legend">
                             Availability
@@ -158,11 +159,13 @@ export default function Books() {
                               }}
                               className="checkbox"
                             />
-                            {myBook.available ? (
-                              <span>Available</span>
-                            ) : (
-                              <span>Unavailable</span>
-                            )}
+                            <div className="hidden md:block">
+                              {myBook.available ? (
+                                <span>Available</span>
+                              ) : (
+                                <span>Unavailable</span>
+                              )}
+                            </div>
                           </label>
                         </fieldset>
                       </div>
@@ -236,7 +239,6 @@ export default function Books() {
             <button>close</button>
           </form>
         </dialog>
-
         <dialog id="my_modal_6" className="modal  modal-bottom sm:modal-middle">
           <div className="modal-box rounded-md">
             <h1 className="text-2xl font-bold text-center">Borrow Book</h1>
@@ -278,7 +280,7 @@ export default function Books() {
                         />
                       </div>
                     </div>
-                    <button className="btn btn-neutral w-1/4 mx-auto mt-4">
+                    <button className="btn bg-[#06923E] text-white w-1/4 mx-auto mt-4">
                       Borrow
                     </button>
                   </form>
@@ -287,60 +289,118 @@ export default function Books() {
             </div>
           </div>
           <form method="dialog" className="modal-backdrop">
-            <button onClick={()=>setBorrowError(false)}>close</button>
+            <button onClick={() => setBorrowError(false)}>close</button>
           </form>
         </dialog>
-
-        <table className="table">
-          {/* head */}
-          <thead>
-            <tr>
-              <th></th>
-              <th>Title</th>
-              <th>Author</th>
-              <th>Genre</th>
-              <th>ISBN</th>
-              <th>Copies</th>
-              <th>Availability</th>
-              <th className="text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
+        <div className="lg:block hidden">
+          <table className="table">
+            {/* head */}
+            <thead>
+              <tr>
+                <th></th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Genre</th>
+                <th>ISBN</th>
+                <th>Copies</th>
+                <th>Availability</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.books.map((book: IBook, indx: number) => (
+                <tr key={indx}>
+                  <th>{indx + 1}</th>
+                  <th>{book.title}</th>
+                  <td>{book.author}</td>
+                  <td>{book.genre}</td>
+                  <td>{book.isbn}</td>
+                  <td>{book.copies}</td>
+                  <td>
+                    {book.available ? (
+                      <TiTick className="w-6 h-6 text-green-500" />
+                    ) : (
+                      <RxCross2 className="w-6 h-6 text-red-500" />
+                    )}
+                  </td>
+                  <td className="flex gap-2 items-center justify-around">
+                    <FaEdit
+                      onClick={() => handleEdit(book)}
+                      className="w-6 h-6 hover:cursor-pointer"
+                    />
+                    <MdDelete
+                      onClick={() => handleDelete(book._id)}
+                      className="w-6 h-6 hover:cursor-pointer text-red-500"
+                    />
+                    <button
+                      onClick={() => handleBorrow(book)}
+                      className={`btn bg-[#06923E] text-white disabled:cursor-not-allowed`}
+                      disabled={!book.available}
+                    >
+                      Borrow
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="block lg:hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
             {data.books.map((book: IBook, indx: number) => (
-              <tr key={indx}>
-                <th>{indx + 1}</th>
-                <th>{book.title}</th>
-                <td>{book.author}</td>
-                <td>{book.genre}</td>
-                <td>{book.isbn}</td>
-                <td>{book.copies}</td>
-                <td>
-                  {book.available ? (
-                    <TiTick className="w-6 h-6 text-green-500" />
-                  ) : (
-                    <RxCross2 className="w-6 h-6 text-red-500" />
-                  )}
-                </td>
-                <td className="flex gap-2 items-center justify-around">
-                  <FaEdit
-                    onClick={() => handleEdit(book)}
-                    className="w-6 h-6 hover:cursor-pointer"
-                  />
-                  <MdDelete
-                    onClick={() => handleDelete(book._id)}
-                    className="w-6 h-6 hover:cursor-pointer text-red-500"
-                  />
+              <div
+                key={indx}
+                className="border-1 border-base-300 rounded-sm shadow p-4 flex flex-col justify-between"
+              >
+                <div className="mb-4">
+                  <h2 className="text-lg font-semibold mb-1">{book.title}</h2>
+                  <p className="text-sm text-gray-600">
+                    <span className="font-medium">Author:</span> {book.author}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    <span className="font-medium">Genre:</span> {book.genre}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    <span className="font-medium">ISBN:</span> {book.isbn}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    <span className="font-medium">Copies:</span> {book.copies}
+                  </p>
+                  <p className="text-sm flex gap-1 items-center">
+                    <span className="font-medium">Availability:</span>{" "}
+                    {book.available ? (
+                      <TiTick className="w-5 h-5 text-green-500" />
+                    ) : (
+                      <RxCross2 className="w-5 h-5 text-red-500" />
+                    )}
+                  </p>
+                </div>
+
+                <div className="flex justify-end gap-2">
+                  <div className="text-sm px-3 py-1 bg-yellow-100 border border-yellow-500 text-yellow-700 rounded hover:bg-yellow-200">
+                    <FaEdit
+                      onClick={() => handleEdit(book)}
+                      className="w-6 h-6 hover:cursor-pointer"
+                    />
+                  </div>
+                  <div className="text-sm px-3 py-1 bg-red-100 border border-red-500 text-red-700 rounded hover:bg-red-200">
+                    <MdDelete
+                      onClick={() => handleDelete(book._id)}
+                      className="w-6 h-6 hover:cursor-pointer text-red-500"
+                    />
+                  </div>
                   <button
                     onClick={() => handleBorrow(book)}
-                    className="btn btn-neutral"
+                    className={`btn bg-[#06923E] text-white disabled:cursor-not-allowed`}
+                    disabled={!book.available}
                   >
                     Borrow
                   </button>
-                </td>
-              </tr>
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
       </div>
     </div>
   );

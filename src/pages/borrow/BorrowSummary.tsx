@@ -10,14 +10,14 @@ export default function BorrowSummary() {
 
   if (isLoading) {
     return (
-      <div className="mx-auto mt-52 w-10">
+      <div className="mx-auto my-20 w-10">
         <span className="loading loading-bars loading-xl"></span>
       </div>
     );
   }
 
   return (
-    <div className="md:w-3/4 mx-auto w-11/12">
+    <div className="md:w-3/4 mx-auto">
       <table className="table">
         {/* head */}
         <thead>
@@ -25,7 +25,7 @@ export default function BorrowSummary() {
             <th></th>
             <th>Title</th>
             <th>ISBN</th>
-            <th>Borrowed Quantity</th>
+            <th>Quantity</th>
           </tr>
         </thead>
         <tbody>
